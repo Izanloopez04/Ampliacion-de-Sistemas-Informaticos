@@ -1,1 +1,0 @@
-# Ampliacion-de-Sistemas-Informaticos
