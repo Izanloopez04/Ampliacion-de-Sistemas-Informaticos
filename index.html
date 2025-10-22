@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>YoungLA: Ropa Deportiva</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #212432;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #ed1c24;
+      padding: 1.2rem 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    .container {
+      max-width: 460px;
+      margin: 2rem auto;
+      background: #2e2e38;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    h2 {
+      color: #f9d923;
+      font-size: 1.2rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    .productos {
+      margin-top: 1.2rem;
+    }
+    .producto {
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+    .producto img {
+      width: 140px;
+      border-radius: 10px;
+      margin-bottom: 0.4rem;
+      background: #000;
+    }
+    .iconos {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin: 1.2rem 0 0.9rem 0;
+    }
+    .icono-btn {
+      border: none;
+      background: #202142;
+      border-radius: 6px;
+      padding: 4px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .icono-btn:hover, .icono-btn:focus {
+      background: #f9d923;
+    }
+    .iconos img {
+      width: 38px;
+      height: 38px;
+      display: block;
+    }
+    #info-iconos {
+      display: none;
+      margin: 1rem auto 0 auto;
+      padding: 0.7rem;
+      background: #28416a;
+      border-radius: 8px;
+      font-size: 0.94rem;
+      text-align: center;
+      max-width: 330px;
+    }
+    button {
+      background: #f9d923;
+      border: none;
+      color: #222;
+      border-radius: 4px;
+      padding: 0.5rem 1.1rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    #info {
+      display: none;
+      margin: 1rem 0 0 0;
+      padding: 0.7rem;
+      background: #222f4a;
+      border-radius: 8px;
+      font-size: 0.94rem;
+    }
+    a {
+      color: #f9d923;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>YoungLA</h1>
+    <div class="iconos">
+      <button class="icono-btn" onclick="mostrarInfoIcono(0)" title="Entrenamiento">
+        <img src="https://img.icons8.com/ios-filled/50/ed1c24/dumbbell.png" alt="Icono pesas">
+      </button>
+      <button class="icono-btn" onclick="mostrarInfoIcono(1)" title="Atleta">
+        <img src="https://img.icons8.com/ios/50/ed1c24/athlete.png" alt="Icono atleta">
+      </button>
+      <button class="icono-btn" onclick="mostrarInfoIcono(2)" title="Camiseta">
+        <img src="https://img.icons8.com/ios-filled/50/ed1c24/t-shirt.png" alt="Icono camiseta">
+      </button>
+    </div>
+    <div id="info-iconos"></div>
+  </header>
+  <div class="container">
+    <h2>¿Qué es YoungLA?</h2>
+    <p>
+      YoungLA es una marca de Los Ángeles, famosa por su ropa deportiva y urbana de alta calidad y precios accesibles, con diseños modernos y cómodos[web:13][web:37].
+    </p>
+    <h2>Productos Populares</h2>
+    <div class="productos">
+      <div class="producto">
+        <img src="https://eu.youngla.com/cdn/shop/files/YLA5.2480_ccdfd5eb-a616-4c81-a55c-157039b50eb5.jpg?v=1750972680&width=300" alt="YoungLA Designer Tee">
+        <span>Camiseta Oversize tom y jerry</span>
+      </div>
+      <div class="producto">
+        <img src="https://eu.youngla.com/cdn/shop/files/5094_black-wash_0011_07_01_bryan_lifestyle.jpg?v=1750972678&width=300" alt="YoungLA Baggy Sweats">
+        <span>Sudadera deportiva superman</span>
+      </div>
+      <div class="producto">
+        <img src="https://eu.youngla.com/cdn/shop/files/5014_tan_006_11_26_johnny_ecomm_62d16ef6-15df-4be8-97fb-489cf6f3720a.jpg?v=1731611106&width=300" alt="YoungLA Classic Hoodie">
+        <span>Chaqueta Youngla</span>
+      </div>
+    </div>
+    <button onclick="mostrarInfo()">+ Info</button>
+    <div id="info">
+      YoungLA destaca por sus materiales premium, atención al detalle y una comunidad fitness muy activa. Sus prendas son probadas exhaustivamente para asegurar la calidad[web:13][web:37].
+    </div>
+    <h2>Contacto</h2>
+    <p>Puedes conocer más en <a href="https://www.youngla.com" target="_blank">youngla.com</a></p>
+  </div>
+  <script>
+    const mensajes = [
+      "YoungLA se ha convertido en favorita en el entrenamiento físico global por su durabilidad y estilo en el gimnasio.[web:13]",
+      "Muchos atletas y entusiastas del fitness eligen YoungLA por su comodidad y ajuste ideales para la actividad deportiva.[web:13][web:37]",
+      "Sus camisetas y ropa casual son reconocidas por el equilibrio entre tendencia urbana y funcionalidad deportiva.[web:13]"
+    ];
+    function mostrarInfoIcono(idx) {
+      var info = document.getElementById('info-iconos');
+      info.textContent = mensajes[idx];
+      info.style.display = 'block';
+    }
+    function mostrarInfo() {
+      var info = document.getElementById('info');
+      info.style.display = (info.style.display === "block") ? "none" : "block";
+    }
+  </script>
+</body>
+</html>
