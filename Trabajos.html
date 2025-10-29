@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio de Clase</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #ddd;
+      margin-bottom: 2rem;
+    }
+
+    /* Contenedor de los botones (dos por fila) */
+    .buttons-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Botones con degradado moderno */
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #6dd5ed, #2193b0);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.07);
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      box-shadow: 0 6px 25px rgba(0, 255, 255, 0.5);
+    }
+
+    footer {
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      margin-top: 3rem;
+    }
+
+    footer p {
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TRABAJOS</h1>
+    <p>Haz clic en una tarea para abrir su página individual.</p>
+
+    <div class="buttons-container">
+      <a href="https://izanloopez04.github.io/Ampliacion-de-Sistemas-Informaticos/DESMONTAJE-Y-MONTAJE-ORDENADOR-IZAN-LOPEZ-SAN-JUAN.html" class="btn">DESMONTAJE PC</a>
+      <a href="https://izanloopez04.github.io/Ampliacion-de-Sistemas-Informaticos/ServerIzan.html" class="btn">DESMONTAJE DE UN SERVIDOR</a>
+      <a href="https://izanloopez04.github.io/Ampliacion-de-Sistemas-Informaticos/Servidor-IA-Izan-Lopez-San-Juan.html" class="btn">SERVIDOR DE IA</a>
+      <a href="https://izanloopez04.github.io/Ampliacion-de-Sistemas-Informaticos/index.html" class="btn">Primera página en Github</a>
+      <a href="https://izanloopez04.github.io/Ampliacion-de-Sistemas-Informaticos/INSTALAR-UN-SERVIDOR-SSH-EN-LINUX.html" class="btn">INSTALAR SSH LINUX</a>
+      <a href="tarea6.html" class="btn">Tarea 6</a>
+      <a href="tarea7.html" class="btn">Tarea 7</a>
+      <a href="tarea8.html" class="btn">Tarea 8</a>
+      <a href="tarea9.html" class="btn">Tarea 9</a>
+      <a href="tarea10.html" class="btn">Tarea 10</a>
+      <a href="tarea11.html" class="btn">Tarea 11</a>
+      <a href="tarea12.html" class="btn">Tarea 12</a>
+    </div>
+  </header>
+</body>
+</html>
