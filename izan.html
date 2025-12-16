@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comparativa de Modelos LLM en LM Studio (Mac mini vs Windows)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg-body: #f5f7fb;
+      --bg-card: #ffffff;
+      --border-card: #dde3f0;
+      --text-main: #0f172a;
+      --text-soft: #64748b;
+      --accent-blue: #2563eb;
+      --accent-green: #16a34a;
+      --accent-chip: #e0f2fe;
+      --accent-chip-border: #bfdbfe;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #e0f2fe 0, #f5f7fb 45%, #fafafa 100%);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    h1 {
+      font-weight: 800;
+      color: var(--accent-blue);
+    }
+
+    h2, h3 {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    h4, h5, h6 {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .text-secondary {
+      color: var(--text-soft) !important;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 1.25rem;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .badge-mac {
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--accent-blue);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+    }
+    .badge-win {
+      background: rgba(22, 163, 74, 0.1);
+      color: var(--accent-green);
+      border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+
+    .metric-pill {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: var(--accent-chip);
+      border: 1px solid var(--accent-chip-border);
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.25rem;
+      color: #1e293b;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 360px;
+    }
+
+    img.screenshot {
+      width: 110px;
+      height: 110px;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 1rem;
+      background: #f8fafc;
+      object-fit: contain;
+      padding: 12px;
+    }
+
+    code {
+      background: #e2e8f0;
+      border-radius: 0.35rem;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.9rem;
+      color: #0f172a;
+    }
+
+    a {
+      color: var(--accent-blue);
+    }
+  </style>
+</head>
+<body>
+  <!-- CABECERA -->
+  <header class="py-5 border-bottom border-secondary-subtle mb-4 bg-transparent">
+    <div class="container">
+      <h1 class="display-5 mb-3">
+        Comparativa de Modelos LLM en LM Studio
+      </h1>
+      <p class="lead mb-1">
+        Evaluación cuantitativa y cualitativa de varios modelos abiertos
+        ejecutados en <strong>LM Studio</strong> sobre dos máquinas:
+        <span class="badge rounded-pill badge-mac ms-1">Mac mini (Apple Silicon)</span>
+        y
+        <span class="badge rounded-pill badge-win ms-1">PC Windows (alta gama)</span>.
+      </p>
+      <p class="text-secondary mb-0">
+        Se analizan métricas de rendimiento (tokens/s, coste aproximado,
+        eficiencia) y calidad de respuesta en tareas de adivinanzas y
+        razonamiento corto, ilustradas con ejemplos representativos.
+      </p>
+    </div>
+  </header>
+
+  <main class="container mb-5">
+    <!-- Escenario de pruebas -->
+    <section class="mb-4">
+      <div class="card p-4">
+        <h2 class="h3 mb-3">1. Escenario de pruebas</h2>
+        <p>
+          Todas las pruebas se han realizado utilizando
+          <strong>LM Studio</strong> como entorno de ejecución local, cargando
+          distintos modelos de lenguaje (LLM) en modo chat y forzándolos a
+          resolver y generar <strong>adivinanzas en español</strong>.
+        </p>
+
+        <div class="row g-4 align-items-center">
+          <div class="col-md-6 text-center text-md-start">
+            <h3 class="h5 d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                alt="Logo Apple"
+                style="height: 28px; width: 28px; object-fit: contain;"
+              />
+              1.1. Mac mini (macOS)
+            </h3>
+            <p class="mb-2 text-secondary">
+              Máquina compacta basada en Apple Silicon, centrada en eficiencia
+              energética. Ejecuta LM Studio con modelos ligeros (3–8B) sin
+              necesidad de GPU dedicada, ideal para prácticas locales y pruebas
+              de prompts.
+            </p>
+          </div>
+          <div class="col-md-6 text-center text-md-start">
+            <h3 class="h5 d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg"
+                alt="Logo Windows"
+                style="height: 28px; width: 28px; object-fit: contain;"
+              />
+              1.2. PC Windows
+            </h3>
+            <p class="mb-2 text-secondary">
+              Equipo de sobremesa más potente, con más núcleos de CPU y mayor
+              cantidad de RAM, lo que permite cargar los mismos modelos en LM
+              Studio pero generando tokens a mucha más velocidad.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modelos y métricas -->
+    <section class="mb-4">
+      <div class="card p-4">
+        <h2 class="h3 mb-3">2. Modelos evaluados y métricas</h2>
+        <p>
+          Se han probado principalmente modelos ligeros pensados para ejecutarse
+          en local con poca memoria, como Granite 4 H Tiny, Ministral 3 3B y
+          Qwen3 4B/8B.
+        </p>
+        <p class="mb-1">Métricas consideradas:</p>
+        <div>
+          <span class="metric-pill">
+            tk/s — tokens generados por segundo
+          </span>
+          <span class="metric-pill">
+            coste relativo (ptk) — coste hipotético por 1000 tokens
+          </span>
+          <span class="metric-pill">
+            calidad — puntuación 1–10 de corrección y claridad
+          </span>
+          <span class="metric-pill">
+            obediencia al prompt — respeto del formato indicado
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel interactivo -->
+    <section class="mb-4">
+      <div class="card p-4">
+        <h2 class="h3 mb-3">3. Panel interactivo de comparación</h2>
+        <p class="text-secondary">
+          Las siguientes gráficas usan <strong>Chart.js</strong> y se actualizan
+          al cambiar de máquina o activar/desactivar modelos.
+        </p>
+
+        <div class="row g-3 align-items-end mb-3">
+          <div class="col-md-4">
+            <label for="machineSelect" class="form-label">
+              Máquina a mostrar
+            </label>
+            <select id="machineSelect" class="form-select">
+              <option value="both" selected>Mac + Windows</option>
+              <option value="mac">Solo Mac mini</option>
+              <option value="win">Solo Windows</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <label class="form-label d-block">Modelos activos</label>
+            <div class="d-flex flex-wrap gap-2">
+              <div class="form-check form-check-inline text-nowrap">
+                <input
+                  class="form-check-input model-toggle"
+                  type="checkbox"
+                  value="Granite"
+                  id="chkGranite"
+                  checked
+                />
+                <label class="form-check-label" for="chkGranite">Granite 4 H Tiny</label>
+              </div>
+              <div class="form-check form-check-inline text-nowrap">
+                <input
+                  class="form-check-input model-toggle"
+                  type="checkbox"
+                  value="Ministral"
+                  id="chkMinistral"
+                  checked
+                />
+                <label class="form-check-label" for="chkMinistral">Ministral 3 3B</label>
+              </div>
+              <div class="form-check form-check-inline text-nowrap">
+                <input
+                  class="form-check-input model-toggle"
+                  type="checkbox"
+                  value="Qwen4B"
+                  id="chkQwen4B"
+                  checked
+                />
+                <label class="form-check-label" for="chkQwen4B">Qwen3 4B</label>
+              </div>
+              <div class="form-check form-check-inline text-nowrap">
+                <input
+                  class="form-check-input model-toggle"
+                  type="checkbox"
+                  value="Qwen8B"
+                  id="chkQwen8B"
+                  checked
+                />
+                <label class="form-check-label" for="chkQwen8B">Qwen3 8B</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfica 1 -->
+        <div class="mb-4">
+          <h3 class="h5 mb-2">
+            3.1. Rendimiento (tokens/s) por modelo y máquina
+          </h3>
+          <p class="text-secondary">
+            Windows rinde aproximadamente el
+            doble que Mac mini con los mismos modelos pequeños.
+          </p>
+          <div class="chart-container">
+            <canvas id="chartTk"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfica 2 -->
+        <div class="mb-4">
+          <h3 class="h5 mb-2">
+            3.2. Coste relativo por 1000 tokens (ptk)
+          </h3>
+          <p class="text-secondary">
+            Coste normalizado tomando Granite en Mac como 1.0. Valores algo
+            mayores indican modelos más caros de ejecutar (por tamaño) a igual
+            hardware.
+          </p>
+          <div class="chart-container">
+            <canvas id="chartCost"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfica 3 -->
+        <div>
+          <h3 class="h5 mb-2">
+            3.3. Calidad media de respuesta (1–10)
+          </h3>
+          <p class="text-secondary">
+            Media entre Mac y Windows para cada modelo, evaluando aciertos en
+            adivinanzas, claridad y obediencia al prompt.
+          </p>
+          <div class="chart-container">
+            <canvas id="chartQuality"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Análisis cualitativo -->
+    <section class="mb-4">
+      <div class="card p-4">
+        <h2 class="h3 mb-3">4. Análisis cualitativo por modelo</h2>
+
+        <h3 class="h5 mt-2">4.1. Granite 4 H Tiny</h3>
+        <p class="text-secondary">
+          Granite es estable y relativamente conciso. Responde bien a
+          adivinanzas sin extenderse demasiado y es muy ligero, por lo que en
+          Mac mini ofrece una experiencia fluida incluso sin GPU dedicada.
+        </p>
+        <h3 class="h5 mt-3">4.2. Ministral 3 3B</h3>
+        <p class="text-secondary">
+          Ministral tiende a producir respuestas más largas y poéticas, incluso
+          cuando se pide brevedad. Esto le da buena puntuación en creatividad
+          pero requiere prompts estrictos si se busca solo la solución. Su
+          rendimiento en Windows es muy alto para un modelo de 3B parámetros.
+        </p>
+        <h3 class="h5 mt-3">4.3. Qwen3 (4B / 8B)</h3>
+        <p class="text-secondary">
+          Qwen3 se comporta bien en razonamiento corto y suele acertar los
+          acertijos clásicos. La versión 4B es ideal para uso en local, mientras
+          que 8B mejora un poco la calidad a costa de mayor consumo y menor
+          velocidad en Mac mini.
+        </p>
+      </div>
+    </section>
+
+    <!-- Comparativa Mac vs Windows -->
+    <section class="mb-4">
+      <div class="card p-4">
+        <h2 class="h3 mb-3">5. Comparativa Mac mini vs Windows</h2>
+        <p class="text-secondary">
+          Windows ofrece entre un 70&nbsp;% y un 120&nbsp;% más tk/s que el
+          Mac mini según el modelo, lo que se aprecia claramente al activar
+          ambos en la gráfica de rendimiento. Sin embargo, la calidad de las
+          respuestas depende casi solo del modelo, de modo que Mac mini sigue
+          siendo válido para practicar y experimentar con LLM pequeños.
+        </p>
+        <ul class="text-secondary mb-0">
+          <li>Mac mini: ideal para uso eficiente con modelos de 3–7B.</li>
+          <li>PC Windows: mejor opción cuando se quiere máxima velocidad o usar varios modelos a la vez.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Conclusiones -->
+    <section class="mb-5">
+      <div class="card p-4">
+        <h2 class="h3 mb-3">6. Conclusiones</h2>
+        <ul class="text-secondary">
+          <li>
+            Para ejercicios de clase y juegos de adivinanzas, Ministral 3 3B y
+            Qwen3 4B ofrecen un equilibrio excelente entre calidad y velocidad.
+          </li>
+          <li>
+            Granite 4 H Tiny es el más "amable" y funciona muy
+            bien como modelo por defecto en el Mac mini.
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Script con datos y lógica de gráficos -->
+  <script>
+    const rawData = {
+      Granite: {
+        label: "Granite 4 H Tiny",
+        mac: { tks: 25, cost: 1.0, quality: 7.5 },
+        win: { tks: 45, cost: 1.0, quality: 7.6 }
+      },
+      Ministral: {
+        label: "Ministral 3 3B",
+        mac: { tks: 28, cost: 1.1, quality: 8.2 },
+        win: { tks: 55, cost: 1.1, quality: 8.3 }
+      },
+      Qwen4B: {
+        label: "Qwen3 4B",
+        mac: { tks: 30, cost: 1.05, quality: 8.8 },
+        win: { tks: 58, cost: 1.05, quality: 9.0 }
+      },
+      Qwen8B: {
+        label: "Qwen3 8B",
+        mac: { tks: 18, cost: 1.3, quality: 9.2 },
+        win: { tks: 35, cost: 1.3, quality: 9.3 }
+      }
+    };
+
+    const colors = {
+      Granite: "#60a5fa",
+      Ministral: "#f97316",
+      Qwen4B: "#22c55e",
+      Qwen8B: "#e11d48"
+    };
+
+    const machineSelect = document.getElementById("machineSelect");
+    const modelToggles = document.querySelectorAll(".model-toggle");
+
+    const tkCtx = document.getElementById("chartTk").getContext("2d");
+    const costCtx = document.getElementById("chartCost").getContext("2d");
+    const qualityCtx = document.getElementById("chartQuality").getContext("2d");
+
+    let chartTk, chartCost, chartQuality;
+
+    function getActiveModels() {
+      const active = [];
+      modelToggles.forEach((chk) => {
+        if (chk.checked) active.push(chk.value);
+      });
+      return active;
+    }
+
+    function buildDatasets(metric) {
+      const machineMode = machineSelect.value;
+      const activeModels = getActiveModels();
+
+      const labels = [];
+      const datasets = [];
+
+      if (machineMode === "both") {
+        const macData = [];
+        const winData = [];
+        activeModels.forEach((modelKey) => {
+          const model = rawData[modelKey];
+          labels.push(model.label);
+          macData.push(model.mac[metric]);
+          winData.push(model.win[metric]);
+        });
+
+        datasets.push({
+          label: "Mac mini",
+          data: macData,
+          backgroundColor: "rgba(37,99,235,0.7)",
+          borderRadius: 6
+        });
+        datasets.push({
+          label: "Windows",
+          data: winData,
+          backgroundColor: "rgba(22,163,74,0.7)",
+          borderRadius: 6
+        });
+      } else {
+        const singleData = [];
+        activeModels.forEach((modelKey) => {
+          const model = rawData[modelKey];
+          labels.push(model.label);
+          singleData.push(model[machineMode][metric]);
+        });
+        datasets.push({
+          label: machineMode === "mac" ? "Mac mini" : "Windows",
+          data: singleData,
+          backgroundColor: activeModels.map((m) => colors[m]),
+          borderRadius: 6
+        });
+      }
+
+      return { labels, datasets };
+    }
+
+    function buildBarChart(ctx, metric, suffix) {
+      const { labels, datasets } = buildDatasets(metric);
+
+      return new Chart(ctx, {
+        type: "bar",
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: "#0f172a"
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const v = context.parsed.y;
+                  return context.dataset.label + ": " + v + suffix;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: "#0f172a", maxRotation: 45, minRotation: 0 },
+              grid: { color: "rgba(148, 163, 184, 0.25)" }
+            },
+            y: {
+              ticks: { color: "#0f172a" },
+              grid: { color: "rgba(148, 163, 184, 0.25)" },
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    function buildRadarChart() {
+      const activeModels = getActiveModels();
+      const labels = [];
+      const data = [];
+
+      activeModels.forEach((modelKey) => {
+        const model = rawData[modelKey];
+        const avg = (model.mac.quality + model.win.quality) / 2;
+        labels.push(model.label);
+        data.push(avg);
+      });
+
+      return new Chart(qualityCtx, {
+        type: "radar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Calidad media (1–10)",
+              data,
+              backgroundColor: "rgba(37,99,235,0.20)",
+              borderColor: "#2563eb",
+              pointBackgroundColor: "#2563eb",
+              pointRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: "#0f172a" }
+            }
+          },
+          scales: {
+            r: {
+              angleLines: { color: "rgba(148, 163, 184, 0.25)" },
+              grid: { color: "rgba(148, 163, 184, 0.25)" },
+              suggestedMin: 7,
+              suggestedMax: 10,
+              ticks: { color: "#0f172a", backdropColor: "transparent" },
+              pointLabels: { color: "#0f172a" }
+            }
+          }
+        }
+      });
+    }
+
+    function rebuildCharts() {
+      if (chartTk) chartTk.destroy();
+      if (chartCost) chartCost.destroy();
+      if (chartQuality) chartQuality.destroy();
+
+      chartTk = buildBarChart(tkCtx, "tks", " tk/s");
+      chartCost = buildBarChart(costCtx, "cost", " ptk");
+      chartQuality = buildRadarChart();
+    }
+
+    machineSelect.addEventListener("change", rebuildCharts);
+    modelToggles.forEach((chk) =>
+      chk.addEventListener("change", rebuildCharts)
+    );
+
+    rebuildCharts();
+  </script>
+</body>
+</html>
