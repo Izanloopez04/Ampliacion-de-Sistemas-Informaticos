@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Despliegue: Agente IA Local | Izan Lopez</title>
+    <style>
+        :root {
+            --bg-color: #010409;
+            --card-bg: #0d1117;
+            --text-main: #e6edf3;
+            --text-accent: #79c0ff; /* Azul brillante estilo GitHub Dark */
+            --border-color: #30363d;
+            --code-bg: #161b22;
+            --success: #238636;
+            --error: #f85149;
+            --warning: #d29922;
+            --gradient: linear-gradient(135deg, #1f6feb 0%, #79c0ff 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 50px;
+            background: radial-gradient(circle at center, #161b22 0%, transparent 100%);
+        }
+
+        h1 { 
+            font-size: 2.5em;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px; 
+        }
+
+        h2 { 
+            color: var(--text-accent); 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 50px;
+            font-size: 1.8em;
+        }
+
+        h2::before {
+            content: "::";
+            color: var(--text-accent);
+            font-family: monospace;
+        }
+
+        h3 { color: #ffffff; margin-top: 30px; font-weight: 600; }
+
+        .badge {
+            background-color: #1f6feb;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin: 0 5px;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .step-card:hover {
+            border-color: #58a6ff;
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.1);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'SFMono-Regular', monospace;
+            background-color: rgba(110, 118, 129, 0.2);
+            padding: 3px 6px;
+            border-radius: 6px;
+            color: #ff7b72;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        pre::after {
+            content: "JSON CONFIG";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.7em;
+            color: #8b949e;
+        }
+
+        .error-log {
+            border-left: 4px solid var(--error);
+            background-color: rgba(248, 81, 73, 0.05);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .solution-log {
+            border-left: 4px solid var(--success);
+            background-color: rgba(46, 160, 67, 0.05);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .img-container {
+            background: #010409;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 6px;
+            display: block;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        img:hover { opacity: 1; }
+
+        .caption {
+            font-size: 0.9em;
+            color: #8b949e;
+            margin-top: 12px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            color: #8b949e;
+        }
+
+        footer strong { color: var(--text-accent); }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Despliegue de Agente IA Local</h1>
+        <p>Documentación técnica de implementación de sistemas autónomos</p>
+        <p><strong>Responsable: Izan Lopez</strong></p>
+
+        <div style="margin-top: 20px;">
+            <span class="badge">Open Code</span> 
+            <span class="badge">Node.js</span> 
+            <span class="badge">LLM Local</span>
+        </div>
+    </header>
+
+    <section>
+        <h2>1. Arquitectura del Ecosistema</h2>
+        <p>Hemos diseñado una solución de asistencia en programación orientada a la <strong>privacidad total</strong>. El sistema opera al 100% en local, aprovechando la aceleración de hardware del Mac para eliminar la dependencia de servicios en la nube. El esquema se divide en dos pilares fundamentales:</p>
+        <ul>
+            <li><strong>Núcleo de Inteligencia (Servidor):</strong> LM Studio gestionando un modelo Llama-3 mediante una infraestructura de API local.</li>
+            <li><strong>Interfaz de Acción (Cliente):</strong> El agente OpenCode, encargado de la orquestación y ejecución de scripts directamente en el entorno del sistema operativo.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>2. Protocolo de Instalación</h2>
+
+        <div class="step-card">
+            <h3>Fase 1: Levantamiento del Servidor Inferencial</h3>
+            <p>Configuramos LM Studio para que actúe como un puente de comunicación estandarizado (compatible con OpenAI) para el consumo del modelo.</p>
+            <ul>
+                <li><strong>Engine:</strong> Meta Llama 3 8B Instruct.</li>
+                <li><strong>Socket:</strong> Puerto <code>1234</code>.</li>
+                <li><strong>Seguridad:</strong> Políticas de CORS habilitadas para permitir la interacción del agente.</li>
+            </ul>
+            <div class="img-container">
+                <img src="foto2.png" alt="Configuración de LM Studio">
+                <div class="caption">Terminal de control: Servidor activo, puerto 1234 vinculado y GPU Apple Metal en uso.</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <h3>Fase 2: Orquestación del Agente</h3>
+            <p>Dada la naturaleza específica del paquete, realizamos un enlace manual del motor del agente mediante la configuración del perfil de usuario.</p>
+            <p>Inyectamos la configuración en <code>~/opencode/opencode.json</code> para redirigir el flujo de pensamiento al localhost:</p>
+            <pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "lmstudio": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LM Studio Local",
+      "options": {
+        "baseURL": "http://127.0.0.1:1234/v1"
+      },
+      "models": {
+        "modelo-local": {
+          "name": "local-model"
+        }
+      }
+    }
+  }
+}</code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>3. Registro de Incidencias y Depuración</h2>
+        <p>Durante el proceso de despliegue, surgieron retos técnicos que requirieron ajustes finos en la lógica de conexión y permisos:</p>
+
+        <div class="step-card">
+            <h3>Incidencia A: Disponibilidad de Dependencias</h3>
+            <div class="error-log">
+                <strong>Diagnóstico:</strong> Error <code>E404</code> en el registro público de NPM.
+            </div>
+            <div class="solution-log">
+                <strong>Resolución:</strong> Se omitió la instalación global y se procedió a la configuración directa del JSON en el directorio raíz del usuario para enlazar los binarios locales.
+            </div>
+        </div>
+
+        <div class="step-card">
+            <h3>Incidencia B: Sesgo del System Prompt</h3>
+            <div class="error-log">
+                <strong>Diagnóstico:</strong> El modelo negaba su propia integración local ("Alucinación de Identidad").
+            </div>
+            <p>Se determinó que las instrucciones de sistema originales causaban un conflicto de personalidad. Se ajustaron las directivas para que el modelo reconociera su entorno técnico real.</p>
+        </div>
+
+        <div class="step-card">
+            <h3>Incidencia C: Restricciones de SIP en macOS</h3>
+            <div class="error-log">
+                <strong>Diagnóstico:</strong> Denegación de escritura en rutas protegidas por el sistema operativo.
+            </div>
+            <div class="solution-log">
+                <strong>Resolución:</strong> Reorientación del espacio de trabajo. Se definieron nuevas rutas de salida en el entorno del usuario: <code>/Users/aulaateca26/Desktop</code>.
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>4. Validación y Resultados</h2>
+        <p>El sistema se encuentra totalmente operativo. El agente no solo genera código Python optimizado, sino que tiene autonomía para crear, escribir y ejecutar scripts en el entorno local de forma segura.</p>
+        
+        <div class="img-container">
+            <img src="foto1.png" alt="Éxito final">
+            <div class="caption">Validación final: Ciclo de ejecución completado con éxito y salida de terminal confirmada.</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>DOCUMENTACIÓN TÉCNICA FINALIZADA POR <strong>IZAN LOPEZ</strong></p>
+        <p>© 2024 - Sistema de Agentes Locales</p>
+    </footer>
+</div>
+
+</body>
+</html>
