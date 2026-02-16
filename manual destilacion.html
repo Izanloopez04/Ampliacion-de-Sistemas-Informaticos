@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Distillation Logbook | Izan López</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --card-surface: #0f172a;
+            --accent-glow: #6366f1;
+            --text-high: #f8fafc;
+            --text-low: #64748b;
+            --primary-gradient: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+            --border-color: #1e293b;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-high);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        /* Hero Modernizado */
+        header {
+            background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #020617 80%);
+            padding: 6rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.02em;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-low);
+            margin-top: 1.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+
+        .badge-mac {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        /* Timeline de Ingeniería */
+        .step {
+            position: relative;
+            padding-left: 4rem;
+            margin-bottom: 5rem;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 17px;
+            top: 40px;
+            bottom: -5rem;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--accent-glow), transparent);
+        }
+
+        .step:last-child::before { display: none; }
+
+        .step-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 36px;
+            height: 36px;
+            background: var(--bg-dark);
+            color: var(--accent-glow);
+            border: 2px solid var(--accent-glow);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .step-content {
+            background: var(--card-surface);
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .step-content:hover {
+            border-color: #334155;
+        }
+
+        h2 { 
+            margin-top: 0; 
+            color: var(--text-high); 
+            font-size: 1.6rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem;
+            font-weight: 700;
+        }
+        
+        /* Ajustes de código */
+        pre {
+            background: #000000 !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+            margin: 1.5rem 0 !important;
+            border: 1px solid #1e293b !important;
+        }
+        
+        code { font-family: 'JetBrains Mono', monospace !important; }
+
+        /* Depuración y Errores */
+        .error-box {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .error-title { color: var(--error); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .fix-title { color: var(--success); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1rem; }
+
+        /* Imágenes y Figuras */
+        .evidence-img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+            filter: grayscale(20%);
+            transition: all 0.4s ease;
+        }
+
+        .evidence-img:hover {
+            filter: grayscale(0%);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .caption {
+            font-size: 0.8rem;
+            color: var(--text-low);
+            text-align: left;
+            margin-top: 0.8rem;
+            padding-left: 0.5rem;
+            border-left: 2px solid var(--accent-glow);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-low);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            background: #010409;
+        }
+
+        .highlight-text { color: var(--accent-glow); font-weight: 600; }
+
+        ul { padding-left: 1.2rem; }
+        li { margin-bottom: 0.5rem; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Neural Distillation Project</h1>
+        <p class="subtitle">Optimización y compresión de arquitecturas LLM: Reducción paramétrica de 66M a 4M mediante transferencia de conocimiento.</p>
+        <div class="badge-mac">
+            <i class="fab fa-apple"></i> Compilado en Mac mini (M-Series / Metal Performance Shaders)
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="step">
+            <div class="step-icon">01</div>
+            <div class="step-content">
+                <h2>Arquitectura del Entorno</h2>
+                <p>El despliegue se realizó sobre un entorno **Apple Silicon**, sustituyendo el ecosistema CUDA tradicional por la API **MPS (Metal Performance Shaders)** para maximizar el throughput del hardware de Izan López.</p>
+                
+                <pre><code class="language-bash"># Inicialización de entorno virtual
+python3 -m venv venv
+source venv/bin/activate
+
+# Stack de dependencias core
+pip install torch torchvision transformers datasets accelerate</code></pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">02</div>
+            <div class="step-content">
+                <h2>Lógica de Destilación (Knowledge Transfer)</h2>
+                <p>Implementamos un framework de aprendizaje profesor-estudiante en <code class="language-python">destilar.py</code>. Se utilizó **DistilBERT** como modelo base (Teacher) para supervisar el entrenamiento de un **BERT-Tiny** (Student) mediante funciones de pérdida KL-Divergence.</p>
+                
+                <div class="error-box">
+                    <div class="error-title"><i class="fas fa-microchip"></i> Debug Log: Batch Argument Mismatch</div>
+                    <p><code>TypeError: compute_loss() got an unexpected keyword argument 'num_items_in_batch'</code></p>
+                    <div class="fix-title"><i class="fas fa-wrench"></i> Refactorización aplicada</div>
+                    <p>Se ajustó la firma de la función con <code>**kwargs</code> para asegurar retrocompatibilidad con las últimas abstracciones del Trainer de Hugging Face.</p>
+                </div>
+
+                <div class="error-box">
+                    <div class="error-title"><i class="fas fa-microchip"></i> Debug Log: Input Incompatibility</div>
+                    <p><code>TypeError: forward() got an unexpected keyword argument 'token_type_ids'</code></p>
+                    <div class="fix-title"><i class="fas fa-wrench"></i> Refactorización aplicada</div>
+                    <p>Desarrollamos un filtro de pre-procesamiento para normalizar los tensores de entrada antes de la inferencia del modelo profesor.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">03</div>
+            <div class="step-content">
+                <h2>Pipeline de Entrenamiento</h2>
+                <p>Ejecución del ciclo de entrenamiento optimizado para los núcleos GPU del Mac mini. Se monitorizaron métricas de convergencia en tiempo real.</p>
+                <ul>
+                    <li><strong>Rendimiento:</strong> ~5.83 it/s (Estabilidad térmica óptima).</li>
+                    <li><strong>Ciclo de cómputo:</strong> ~18 minutos.</li>
+                    <li><strong>Delta de convergencia (Loss):</strong> Reducción de 1.47 a 0.86.</li>
+                </ul>
+                <img src="img/prueba1.png" alt="Hardware monitor" class="evidence-img">
+                <div class="caption">Figura 1: Monitoreo de la fase de entrenamiento bajo aceleración MPS.</div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">04</div>
+            <div class="step-content">
+                <h2>Análisis de Compresión y Métricas</h2>
+                <p>Tras 3 épocas de entrenamiento, Izan López logró una eficiencia de almacenamiento radical manteniendo la integridad semántica del modelo.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="background: #020617; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+                        <div style="font-size: 2.2rem; font-weight: 800; color: #38bdf8;">15.3x</div>
+                        <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-low);">Ratio de Compresión</div>
+                    </div>
+                    <div style="background: #020617; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+                        <div style="font-size: 2.2rem; font-weight: 800; color: #4ade80;">80.6%</div>
+                        <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-low);">Accuracy Retenida</div>
+                    </div>
+                </div>
+
+                <img src="img/prueba2.png" alt="Stats" class="evidence-img">
+                <div class="caption">Figura 2: Auditoría final de parámetros (Downsizing exitoso a 4.39M).</div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">05</div>
+            <div class="step-content">
+                <h2>Inferencia y Validación Cross-Language</h2>
+                <p>Durante los tests de validación, se identificó un sesgo lingüístico inicial: el "Teacher" fue pre-entrenado exclusivamente en inglés, lo que limitó la precisión en inputs en español.</p>
+                <p>Al reorientar las pruebas al idioma nativo del modelo, el sistema demostró una clasificación de sentimiento de alta fidelidad:</p>
+                <img src="img/prueba3.png" alt="Inferencia" class="evidence-img">
+                <div class="caption">Figura 3: Análisis de sentimiento positivo/negativo con vectores de confianza optimizados.</div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">06</div>
+            <div class="step-content">
+                <h2>Benchmarking: Teacher vs Student</h2>
+                <p>Duelo final de capacidades cognitivas analizando la herencia de razonamiento del modelo de 4M de parámetros frente al gigante de 66M.</p>
+                <img src="img/prueba4.png" alt="Benchmark" class="evidence-img">
+                
+                <h3 style="margin-top: 2rem;">Insights del Proyecto:</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> **Transferencia de Matices:** El estudiante replicó con éxito la detección de sarcasmo ("Great... flat tire").</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> **Herencia de Sesgos:** Se observó que el estudiante hereda errores lógicos del profesor (ej. fallos en doble negación).</li>
+                    <li><i class="fas fa-exclamation-triangle" style="color: #fbbf24; margin-right: 8px;"></i> **Capacidad Atencional:** El modelo comprimido presenta degradación en secuencias largas con sentimientos mixtos.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Desarrollado y Documentado por <span style="color: var(--text-high); font-weight: 600;">Izan López</span> | 2024</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+</body>
+</html>
