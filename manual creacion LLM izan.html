@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BITÁCORA DE DESARROLLO: PROYECTO CHEF-BOT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        :root {
+            --bg: #050505;
+            --terminal: #101010;
+            --phosphor: #33ff33;
+            --dim: #1a801a;
+            --alert: #ff9900; /* Un naranja para avisos menos robóticos */
+            --error: #ff3333;
+            --cmd-color: #fce94f;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--phosphor);
+            font-family: 'VT323', monospace;
+            font-size: 1.25rem;
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(rgba(0, 35, 0, 0.8), black 130%);
+            min-height: 100vh;
+            line-height: 1.4;
+        }
+
+        .terminal-window {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 2px solid var(--dim);
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(51, 255, 51, 0.05);
+            position: relative;
+        }
+
+        /* Efecto de líneas de escaneo mejorado */
+        .terminal-window::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 2;
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+        }
+
+        h1, h2 { text-transform: uppercase; letter-spacing: 1.5px; }
+        
+        h1 { 
+            border-bottom: 2px solid var(--phosphor); 
+            padding-bottom: 10px;
+            text-shadow: 0 0 8px var(--phosphor);
+            margin-top: 0;
+        }
+
+        .status-bar {
+            background: var(--phosphor);
+            color: black;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .log-entry {
+            margin-bottom: 50px;
+            border-left: 3px solid var(--dim);
+            padding-left: 20px;
+        }
+
+        .timestamp { color: var(--dim); font-size: 1rem; font-style: italic; }
+
+        .code-block {
+            background: #000;
+            border: 1px dashed var(--dim);
+            padding: 15px;
+            color: #ccc;
+            margin-top: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .cmd-prefix { color: var(--phosphor); opacity: 0.7; }
+        .command { color: var(--cmd-color); }
+        .comment { color: #555; display: block; margin-bottom: 5px; font-style: italic; }
+
+        .system-alert {
+            border: 1px solid var(--alert);
+            background: rgba(255, 153, 0, 0.05);
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .alert-header { background: var(--alert); color: black; display: inline-block; padding: 2px 10px; font-weight: bold; margin-bottom: 10px; }
+
+        .solution { color: #fff; text-shadow: 0 0 5px var(--phosphor); }
+        .solution::before { content: "✔ SOLUCIÓN: "; color: var(--phosphor); }
+
+        .evidence-img {
+            width: 100%;
+            filter: grayscale(100%) brightness(0.9) sepia(20%) contrast(1.1);
+            border: 1px solid var(--dim);
+            margin-top: 25px;
+            transition: 0.3s;
+        }
+        
+        .evidence-img:hover { filter: none; border-color: var(--phosphor); }
+
+        footer { text-align: center; margin-top: 60px; color: var(--dim); border-top: 1px solid var(--dim); padding-top: 20px; }
+        
+        .blink { animation: blinker 1.2s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        strong { color: #fff; font-weight: normal; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="terminal-window">
+    <div class="status-bar">
+        <span>ESTADO: CONECTADO</span>
+        <span>MÁQUINA: MAC_SILICON_NODE</span>
+        <span>OPERADOR: GEMA</span>
+    </div>
+
+    <h1>PROYECTO: CHEF-BOT <span class="blink">|</span></h1>
+    <div class="log-entry">
+        <span class="timestamp">[00:01] - Preparando el terreno</span>
+        <h2>FASE 1: DOMANDO EL HARDWARE</h2>
+        <p>Como estamos en un Mac, nos olvidamos de las librerías estándar de NVIDIA. Aquí mandan <strong>MLX</strong> y <strong>Metal</strong>. Primero creamos un entorno limpio para no romper nada y compilamos el motor desde cero.</p>
+        <div class="code-block">
+            <span class="comment"># Un rincón seguro para mis cosas...</span>
+            <span class="cmd-prefix">$</span> <span class="command">python3 -m venv venv && source venv/bin/activate</span><br><br>
+            <span class="comment"># Instalando el motor de Apple...</span>
+            <span class="cmd-prefix">$</span> <span class="command">pip install mlx-lm</span><br><br>
+            <span class="comment"># Construyendo el núcleo de llama.cpp (a toda máquina con Metal)</span>
+            <span class="cmd-prefix">$</span> <span class="command">cmake -B build && cmake --build build --config Release -j</span>
+        </div>
+    </div>
+
+    <div class="log-entry">
+        <span class="timestamp">[00:05] - Alimentando a la bestia</span>
+        <h2>FASE 2: LA RECETA DEL ÉXITO (DATASET)</h2>
+        <p>No podemos soltar al bot sin darle un libro de cocina. He estructurado los datos en formato <strong>JSONL</strong>, usando las etiquetas de 'Phi-3' para que el modelo sepa cuándo hablo yo y cuándo le toca responder a él.</p>
+        <div class="code-block">
+            <span class="comment"># Ejemplo de lo que hay en el menú de entrenamiento:</span>
+            {"text": "&lt;|user|&gt;Oye, tengo patatas...&lt;|end|&gt;&lt;|assistant|&gt;¡Fácil! Una buena tortilla...&lt;|end|&gt;"}
+        </div>
+    </div>
+
+    <div class="log-entry">
+        <span class="timestamp">[00:10] - Gimnasio neuronal</span>
+        <h2>FASE 3: ENTRENAMIENTO LORA</h2>
+        <p>En lugar de reentrenar todo el modelo (que nos llevaría siglos), usamos <strong>LoRA</strong>. Es como ponerle un "parche de conocimiento" específico de cocina sobre su cerebro de propósito general.</p>
+        <div class="code-block">
+            <span class="comment"># A sudar un poco...</span>
+            <span class="cmd-prefix">$</span> <span class="command">python -m mlx_lm.lora --config config_chef.yaml --train</span>
+        </div>
+        <p><strong>Resultado:</strong> Los adaptadores ya están listos en la carpeta <code>./adapters</code>. Ya sabe freír un huevo.</p>
+    </div>
+
+    <div class="log-entry">
+        <span class="timestamp">[00:25] - El toque final</span>
+        <h2>FASE 4: FUSIÓN Y COMPRESIÓN</h2>
+        <p>Ahora toca unirlo todo. Cogemos el modelo base, le pegamos lo aprendido y lo comprimimos a <strong>q4_k_m</strong>. ¿Por qué? Para que vuele sin gastar toda la RAM del Mac.</p>
+        <div class="code-block">
+            <span class="comment"># Mezclando el modelo base con mis adaptadores...</span>
+            <span class="cmd-prefix">$</span> <span class="command">python -m mlx_lm.fuse --model microsoft/Phi-3-mini-4k-instruct --adapter-path adapters --save-path merged_model</span><br><br>
+            <span class="comment"># Convirtiendo a formato GGUF y apretando los tornillos (cuantización)</span>
+            <span class="cmd-prefix">$</span> <span class="command">./llama.cpp/build/bin/llama-quantize chef-bot-f16.gguf chef-bot-q4.gguf q4_k_m</span>
+        </div>
+    </div>
+
+    <div class="system-alert">
+        <div class="alert-header">DIARIO DE ERRORES (O "POR QUÉ NO FUNCIONÓ A LA PRIMERA")</div>
+        
+        <p><strong>• El lío de versiones:</strong> Torch se puso caprichoso con la versión Nightly.</p>
+        <span class="solution">Volví a la versión estable y usé MLX-LM para gestionar la memoria.</span>
+        
+        <p><strong>• El Makefile fantasma:</strong> Intenté usar el Makefile antiguo y falló.</p>
+        <span class="solution">Cambié a CMake; mucho más moderno y menos problemas de rutas.</span>
+        
+        <p><strong>• Rutas perdidas:</strong> El script no encontraba los adaptadores.</p>
+        <span class="solution">Un simple "mv" para ponerlos en la raíz y todo arreglado.</span>
+    </div>
+
+    <div class="log-entry" style="text-align: center; border-left: none; margin-top: 40px;">
+        <h2>¡SISTEMA OPERATIVO Y COCINANDO!</h2>
+        <p>Inferencia lograda a <strong>39 tokens por segundo</strong> (¡va como un tiro!).</p>
+        <p>Aunque bueno, el bot me ha sugerido un "Salvado con Aguacate"... todavía alucina un poco, pero tiene buena pinta.</p>
+        <img src="imagenes/LLM.png" alt="Terminal Output">
+    </div>
+
+    <footer>
+        Bitácora de Ingeniería - Escrito por <strong>Izan Lopez</strong>
+    </footer>
+</div>
+
+</body>
+</html>
