@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Técnica: LLM Local</title>
+    <style>
+        :root {
+            /* Nueva paleta de colores más moderna/cyber */
+            --bg-color: #09090b;       /* Negro casi puro */
+            --card-bg: #18181b;        /* Gris muy oscuro */
+            --text-main: #e4e4e7;      /* Blanco hueso */
+            --text-muted: #a1a1aa;     /* Gris medio */
+            --accent: #8b5cf6;         /* Violeta eléctrico */
+            --accent-secondary: #06b6d4; /* Cian */
+            --code-bg: #000000;        /* Negro total para terminal */
+            --success: #10b981;
+            --error: #f43f5e;
+            --cmd-color: #22c55e;      /* Verde terminal brillante */
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 40px 20px;
+            background-image: radial-gradient(circle at top right, #1e1b4b 0%, transparent 30%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            margin-bottom: 70px;
+            border-bottom: 1px solid #27272a;
+            padding-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin: 0 0 15px 0;
+            /* Nuevo gradiente más vibrante */
+            background: linear-gradient(135deg, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .badge {
+            background: rgba(139, 92, 246, 0.1);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 5px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* SECCIONES */
+        h2 {
+            font-size: 1.6rem;
+            color: #fff;
+            border-left: 0;
+            /* Cambio de estilo: Borde inferior con gradiente en lugar de lateral */
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-top: 70px;
+            margin-bottom: 35px;
+            display: inline-block;
+        }
+
+        .step-card {
+            background: var(--card-bg);
+            border: 1px solid #27272a;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto hover sutil */
+        .step-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .step-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .step-title::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-secondary);
+            border-radius: 50%;
+        }
+
+        /* BLOQUES DE CÓDIGO (TERMINAL) - Estructura intacta */
+        pre {
+            background-color: var(--code-bg);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            border: 1px solid #3f3f46;
+            color: #a5b4fc;
+            margin-top: 20px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .cmd {
+            color: var(--cmd-color);
+            font-weight: 700;
+        }
+
+        .comment {
+            color: #52525b; /* Gris más oscuro para comentarios */
+            font-style: italic;
+        }
+
+        /* IMÁGENES */
+        .evidence-container {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .evidence-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #27272a;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6);
+        }
+
+        .evidence-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .evidence-item img:hover {
+            opacity: 1;
+        }
+
+        .caption {
+            padding: 25px;
+            background: #121214;
+            border-top: 1px solid #27272a;
+        }
+
+        .caption strong {
+            color: var(--accent-secondary);
+            display: block;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* ERRORES */
+        .error-log {
+            background: rgba(244, 63, 94, 0.05); /* Rojo muy suave */
+            border: 1px solid rgba(244, 63, 94, 0.2);
+            border-left: 4px solid var(--error);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+
+        .error-title {
+            color: #fda4af;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 100px;
+            padding-top: 20px;
+            border-top: 1px solid #27272a;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>Reporte Técnico: LLM Training</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Despliegue local de arquitectura Transformer en Apple Silicon</p>
+            <p style="color: var(--accent); font-size: 1rem; font-weight: 600; margin-top: 10px;">Desarrollado por Izan Lopez</p>
+            <div style="margin-top: 25px;">
+                <span class="badge">Hardware: Mac Mini M-Series</span>
+                <span class="badge">Backend: PyTorch MPS</span>
+                <span class="badge">Env: Python 3.9</span>
+            </div>
+        </header>
+
+        <section>
+            <h2>1. Procedimiento de Implementación</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">A continuación se documenta la secuencia exacta de comandos shell utilizados para la configuración del entorno y la ejecución de los scripts de entrenamiento neuronal.</p>
+
+            <div class="step-card">
+                <div class="step-title">1.1. Inicialización del Workspace</div>
+                <p>Para garantizar la integridad de las librerías del sistema, procedemos a instanciar un entorno virtual (<code>venv</code>). Este paso es mandatorio en sistemas macOS para aislar las dependencias.</p>
+                <pre>
+<span class="comment"># Crear carpeta del proyecto y entrar en ella</span>
+<span class="cmd">mkdir curso-ia-nano</span>
+<span class="cmd">cd curso-ia-nano</span>
+
+<span class="comment"># Crear el entorno virtual con Python 3</span>
+<span class="cmd">python3 -m venv venv</span>
+
+<span class="comment"># Activar el entorno (aparecerá (venv) en la terminal)</span>
+<span class="cmd">source venv/bin/activate</span></pre>
+            </div>
+
+            <div class="step-card">
+                <div class="step-title">1.2. Despliegue de Dependencias (PyTorch)</div>
+                <p>Instalación del framework core para Inteligencia Artificial. La build actual de PyTorch reconoce y activa automáticamente la aceleración por hardware en chips Apple Silicon.</p>
+                <pre>
+<span class="comment"># Instalar PyTorch (gestor de tensores y redes neuronales)</span>
+<span class="cmd">pip install torch</span>
+
+<span class="comment"># (Opcional) Instalar NumPy para evitar advertencias</span>
+<span class="cmd">pip install numpy</span></pre>
+            </div>
+
+            <div class="step-card">
+                <div class="step-title">1.3. Ingesta de Datos (Dataset)</div>
+                <p>Adquisición del corpus de entrenamiento. Se utiliza el texto plano de la obra <em>Don Quijote de la Mancha</em> (Project Gutenberg) como fuente primaria para el modelado del lenguaje.</p>
+                <pre>
+<span class="comment"># Descarga directa del archivo de texto</span>
+<span class="cmd">curl -L -o quijote.txt https://www.gutenberg.org/files/2000/2000-0.txt</span></pre>
+            </div>
+
+            <div class="step-card">
+                <div class="step-title">1.4. Ejecución del Bucle de Entrenamiento</div>
+                <p>Lanzamiento del script que define la arquitectura Transformer. El código ha sido refactorizado para asignar el dispositivo de cómputo a <code>device = 'mps'</code>, optimizando el rendimiento.</p>
+                <pre>
+<span class="comment"># Ejecutar el script de entrenamiento configurado para Mac</span>
+<span class="cmd">python entrenar_mac.py</span>
+
+<span class="comment"># (Alternativa usada tras el error de guardado)</span>
+<span class="cmd">python guardar_rapido.py</span></pre>
+            </div>
+
+            <div class="step-card">
+                <div class="step-title">1.5. Validación e Inferencia</div>
+                <p>Fase final: carga de los pesos sinápticos generados (<code>.pth</code>) y ejecución de inferencia para evaluar la coherencia del texto generado por el modelo.</p>
+                <pre>
+<span class="comment"># Script de inferencia que carga el 'cerebro' entrenado</span>
+<span class="cmd">python probar.py</span></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Evidencia Gráfica del Proceso</h2>
+            <p style="margin-bottom: 40px; color: var(--text-muted);">Registro visual que certifica la correcta ejecución y convergencia del modelo.</p>
+            <div class="evidence-container">
+                
+                <div class="evidence-item">
+                    <img src="prueba1.png" alt="Captura del entrenamiento mostrando la bajada del Loss">
+                    <div class="caption">
+                        <strong>Prueba 1: Métricas de Convergencia</strong>
+                        Confirmación de la aceleración por hardware (<code>🚀 Usando aceleración Apple Metal (MPS)</code>). La gráfica de la consola muestra un descenso efectivo del valor de <em>Loss</em> (de 4.74 a 3.32), indicando que la red está minimizando el error y asimilando la estructura de los datos.
+                    </div>
+                </div>
+
+                <div class="evidence-item">
+                    <img src="prueba2.png" alt="Captura del resultado final con el texto generado">
+                    <div class="caption">
+                        <strong>Prueba 2: Persistencia de Datos y Generación</strong>
+                        Validación de salida. Se verifica la generación del binario de pesos <code>nano_quijote.pth</code> (50.35 MB). El output de texto demuestra que el modelo ha aprendido exitosamente la sintaxis básica (espaciado y fonética en español).
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Bitácora de Incidencias</h2>
+            <p style="color: var(--text-muted);">Registro de anomalías técnicas detectadas durante el despliegue y sus respectivas medidas correctivas.</p>
+
+            <div class="error-log">
+                <span class="error-title">⚠️ Incidencia 1: Dependencia NumPy ausente</span>
+                <p>El entorno virtual reportó la ausencia de NumPy. Aunque PyTorch operó con sus tensores nativos, se procedió a la instalación de la librería (<code>pip install numpy</code>) para sanear los logs de la consola.</p>
+            </div>
+
+            <div class="error-log">
+                <span class="error-title">⚠️ Incidencia 2: Fallo en Serialización (Guardado)</span>
+                <p>Durante la primera iteración (300 epochs), el proceso terminó abruptamente sin serializar el modelo. <strong>Solución aplicada:</strong> Se desarrolló un script auxiliar (<code>guardar_rapido.py</code>) para ejecutar un entrenamiento "exprés" de 50 pasos, forzando la llamada a <code>torch.save</code> y garantizando la integridad del archivo de 50MB.</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>Documentación técnica elaborada por <strong>Izan Lopez</strong> &copy; 2024</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
