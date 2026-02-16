@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterclass: Cuantización y Optimización de LLMs | Izan López</title>
+    <style>
+        :root {
+            --bg-main: #0a0a0c;
+            --bg-card: #16161a;
+            --accent-primary: #00f2ff; /* Cyan eléctrico */
+            --accent-secondary: #7000ff; /* Violeta profundo */
+            --text-main: #e2e8f0;
+            --text-dim: #94a3b8;
+            --border: #2d2d39;
+            --code-bg: #000000;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 850px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: radial-gradient(circle at top, #1e1e2e 0%, #0a0a0c 100%);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+        }
+
+        h1 { 
+            margin: 10px 0; 
+            font-size: 2.8rem; 
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .author-badge { 
+            color: var(--accent-primary); 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h2 { 
+            color: #fff; 
+            font-size: 1.6rem; 
+            display: flex; 
+            align-items: center; 
+            margin-top: 0;
+        }
+
+        h2::before { 
+            content: ""; 
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-secondary);
+            border-radius: 3px;
+            margin-right: 15px;
+            box-shadow: 0 0 10px var(--accent-secondary);
+        }
+
+        .desc { color: var(--text-dim); margin-bottom: 25px; font-size: 1.05rem; }
+
+        .code-container {
+            background: var(--code-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.95rem;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .comment { color: #5c6370; font-style: italic; }
+        .cmd { color: #61afef; font-weight: bold; }
+        .arg { color: #d19a66; }
+
+        /* --- SECCIÓN DE MÉTRICAS --- */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .metric-item {
+            padding: 25px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border);
+            text-align: center;
+        }
+
+        .metric-value {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .img-wrapper {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: #000;
+            margin: 30px 0;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+            opacity: 0.9;
+        }
+        
+        footer { 
+            text-align: center; 
+            color: var(--text-dim); 
+            font-size: 0.9rem; 
+            margin-top: 80px; 
+            padding-bottom: 40px;
+        }
+
+        .highlight { color: var(--accent-primary); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="author-badge">Protocolo de Optimización</span>
+        <h1>Manual de Cuantización</h1>
+        <p style="color: var(--text-dim)">Por Izan López</p>
+    </header>
+
+    <div class="section-card">
+        <h2>Fase 1: Preparación del Ecosistema</h2>
+        <p class="desc">Para alcanzar la máxima eficiencia, es imperativo configurar un entorno optimizado. En este proyecto, hemos reutilizado la arquitectura de modelos previamente entrenados, centrando el esfuerzo en la compresión sin pérdida crítica de rendimiento.</p>
+        
+        <p><strong>1. Entorno de Ejecución:</strong> Despliegue de dependencias y motor MLX, diseñado específicamente para aprovechar la arquitectura unificada de Apple Silicon.</p>
+        <div class="code-container">
+            <span class="comment"># Activación del entorno y despliegue</span><br>
+            <span class="cmd">source</span> venv/bin/activate<br>
+            <span class="cmd">pip</span> install mlx-lm cmake
+        </div>
+
+        <p><strong>2. Compilación Core:</strong> Configuración de <code>llama.cpp</code> mediante CMake para habilitar la aceleración por hardware (Metal GPU).</p>
+        <div class="code-container">
+            <span class="cmd">cd</span> llama.cpp<br>
+            <span class="cmd">cmake</span> -B build<br>
+            <span class="cmd">cmake</span> --build build --config Release -j
+        </div>
+
+        <p><strong>3. Fusión de Pesos (Merging):</strong> Proceso de integración de los adaptadores LoRA entrenados con el modelo base original para generar un modelo unificado.</p>
+        <div class="code-container">
+            <span class="cmd">python</span> -m mlx_lm.lora <span class="arg">--config</span> config_chef.yaml <span class="arg">--train</span><br>
+            <span class="cmd">python</span> -m mlx_lm.fuse <span class="arg">--model</span> microsoft/Phi-3-mini-4k-instruct <span class="arg">--adapter-path</span> adapters <span class="arg">--save-path</span> merged_model
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>Fase 2: Proceso de Cuantización</h2>
+        <p class="desc">La cuantización reduce la precisión de los pesos del modelo para minimizar su huella de memoria y acelerar la inferencia.</p>
+        
+        <p><strong>Paso A: Conversión al formato GGUF</strong><br>Transformamos el modelo fusionado a un formato universal de alta precisión (FP16).</p>
+        <div class="code-container">
+            <span class="cmd">python</span> llama.cpp/convert_hf_to_gguf.py merged_model <span class="arg">--outfile</span> chef-bot-f16.gguf
+        </div>
+
+        <p><strong>Paso B: Compresión 4-bit (Q4_K_M)</strong><br>Aplicamos el algoritmo de cuantización para obtener el archivo final optimizado.</p>
+        <div class="code-container">
+            <span class="cmd">./llama.cpp/build/bin/llama-quantize</span> chef-bot-f16.gguf chef-bot-q4.gguf q4_k_m
+        </div>
+    </div>
+
+    <section class="section-card">
+        <h2>📊 Análisis de Resultados</h2>
+        
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <span style="color: #ff4d4d">Modelo Original (F16)</span>
+                <span class="metric-value">~7.12 GB</span>
+            </div>
+            <div class="metric-item">
+                <span style="color: var(--accent-primary)">Modelo Cuantizado (Q4)</span>
+                <span class="metric-value">~2.23 GB</span>
+            </div>
+        </div>
+
+        <div class="img-wrapper">
+            <img src="cuantizacion.jpg" alt="Captura de pantalla del proceso">
+        </div>
+        
+        <p class="desc" style="text-align: center;">
+            <span class="highlight">Conclusión técnica:</span> La optimización no solo reduce el almacenamiento en un <strong>68%</strong>, sino que impacta directamente en la velocidad de respuesta. Se observa una reducción significativa de la latencia (tokens por segundo), permitiendo que el modelo cuantizado sea extremadamente ágil en comparación con su versión original.
+        </p>
+    </section>
+
+    <footer>
+        <p>Documentación Técnica • Desarrollado por <strong>Izan López</strong></p>
+    </footer>
+</div>
+
+</body>
+</html>
