@@ -261,7 +261,7 @@ pip install torch torchvision transformers datasets accelerate</code></pre>
                     <li><strong>Ciclo de cómputo:</strong> ~18 minutos.</li>
                     <li><strong>Delta de convergencia (Loss):</strong> Reducción de 1.47 a 0.86.</li>
                 </ul>
-                <img src="img/prueba1.png" alt="Hardware monitor" class="evidence-img">
+                <img src="prueba1.png" alt="Hardware monitor" class="evidence-img">
                 <div class="caption">Figura 1: Monitoreo de la fase de entrenamiento bajo aceleración MPS.</div>
             </div>
         </div>
@@ -283,7 +283,7 @@ pip install torch torchvision transformers datasets accelerate</code></pre>
                     </div>
                 </div>
 
-                <img src="img/prueba2.png" alt="Stats" class="evidence-img">
+                <img src="prueba2.png" alt="Stats" class="evidence-img">
                 <div class="caption">Figura 2: Auditoría final de parámetros (Downsizing exitoso a 4.39M).</div>
             </div>
         </div>
@@ -294,7 +294,7 @@ pip install torch torchvision transformers datasets accelerate</code></pre>
                 <h2>Inferencia y Validación Cross-Language</h2>
                 <p>Durante los tests de validación, se identificó un sesgo lingüístico inicial: el "Teacher" fue pre-entrenado exclusivamente en inglés, lo que limitó la precisión en inputs en español.</p>
                 <p>Al reorientar las pruebas al idioma nativo del modelo, el sistema demostró una clasificación de sentimiento de alta fidelidad:</p>
-                <img src="img/prueba3.png" alt="Inferencia" class="evidence-img">
+                <img src="prueba3.png" alt="Inferencia" class="evidence-img">
                 <div class="caption">Figura 3: Análisis de sentimiento positivo/negativo con vectores de confianza optimizados.</div>
             </div>
         </div>
@@ -304,7 +304,7 @@ pip install torch torchvision transformers datasets accelerate</code></pre>
             <div class="step-content">
                 <h2>Benchmarking: Teacher vs Student</h2>
                 <p>Duelo final de capacidades cognitivas analizando la herencia de razonamiento del modelo de 4M de parámetros frente al gigante de 66M.</p>
-                <img src="img/prueba4.png" alt="Benchmark" class="evidence-img">
+                <img src="prueba4.png" alt="Benchmark" class="evidence-img">
                 
                 <h3 style="margin-top: 2rem;">Insights del Proyecto:</h3>
                 <ul>
@@ -325,4 +325,5 @@ pip install torch torchvision transformers datasets accelerate</code></pre>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </body>
+
 </html>
