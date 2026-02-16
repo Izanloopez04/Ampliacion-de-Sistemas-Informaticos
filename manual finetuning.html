@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemma 3-270M: Protocolo de Fine-Tuning MLX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terminal-black: #0a0a0c;
+            --neon-blue: #00f2ff;
+            --deep-purple: #7000ff;
+            --matrix-green: #00ff41;
+            --error-red: #ff3e3e;
+            --text-dim: #a0a0b0;
+            --border-glow: rgba(0, 242, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--terminal-black);
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Navegación Estilo Terminal */
+        nav.side-panel {
+            width: 300px;
+            height: 100vh;
+            background: #0d0d11;
+            border-right: 1px solid var(--border-glow);
+            padding: 40px 20px;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .side-panel h2 {
+            font-size: 0.8rem;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            border-left: 3px solid var(--neon-blue);
+            padding-left: 10px;
+        }
+
+        .side-panel ul { list-style: none; }
+        .side-panel li { margin-bottom: 15px; }
+        .side-panel a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: block;
+        }
+        .side-panel a:hover { color: var(--neon-blue); transform: translateX(5px); }
+
+        /* Contenedor Principal */
+        main {
+            margin-left: 300px;
+            padding: 60px 80px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .hero {
+            margin-bottom: 80px;
+            border-bottom: 1px solid #2d2d35;
+            padding-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--deep-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .author-tag {
+            font-size: 1rem;
+            color: var(--matrix-green);
+            opacity: 0.8;
+        }
+
+        /* Secciones */
+        section { margin-bottom: 100px; scroll-margin-top: 50px; }
+        
+        h2.section-title {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        h2.section-title span { color: var(--neon-blue); font-size: 1.2rem; }
+
+        .info-panel {
+            background: rgba(112, 0, 255, 0.05);
+            border: 1px dashed var(--deep-purple);
+            padding: 25px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        /* Bloques de Código */
+        .terminal-block {
+            background: #121217;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid var(--neon-blue);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        code { font-family: 'Fira Code', monospace; color: #d1d1d1; font-size: 0.9rem; }
+        
+        .command-label {
+            font-size: 0.7rem;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Troubleshooting Estilo Log */
+        .log-entry {
+            background: #1a1a20;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        .log-entry.error { border-left: 3px solid var(--error-red); }
+        .log-entry h4 { color: var(--error-red); margin-bottom: 10px; font-size: 1rem; }
+        .log-entry .fix { color: var(--matrix-green); font-size: 0.9rem; margin-top: 10px; }
+
+        footer {
+            margin-top: 100px;
+            padding: 40px 0;
+            border-top: 1px solid #2d2d35;
+            text-align: center;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 900px) {
+            nav.side-panel { display: none; }
+            main { margin-left: 0; padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="side-panel">
+        <h2>System Index</h2>
+        <ul>
+            <li><a href="#intro">00. Introducción</a></li>
+            <li><a href="#paso1">01. Config. Entorno</a></li>
+            <li><a href="#paso2">02. Dependencias</a></li>
+            <li><a href="#paso3">03. Ingesta Modelo</a></li>
+            <li><a href="#paso4">04. Dataset Estructural</a></li>
+            <li><a href="#paso5">05. Pipeline Training</a></li>
+            <li><a href="#paso6">06. Fase Inferencia</a></li>
+            <li><a href="#errores">07. Debugging</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Fine-Tuning Gemma 3</h1>
+            <p class="author-tag">Implementación de Protocolo LoRA // Por Izan López</p>
+        </div>
+
+        <section id="intro">
+            <h2 class="section-title"><span>//</span> Conceptos Base</h2>
+            <p>Este procedimiento detalla la especialización del modelo <strong>Gemma 3-270M IT</strong>. Aplicamos <strong>LoRA</strong> (Low-Rank Adaptation) para inyectar conocimientos específicos sin comprometer la arquitectura base del LLM.</p>
+            
+            <div class="info-panel">
+                <strong>🎯 Meta Operativa:</strong> Transformar el modelo en un instructor de programación para ASIR y validar la identidad de "Rafa Vadal" como pescador de renombre.
+            </div>
+        </section>
+
+        <section id="paso1">
+            <h2 class="section-title"><span>01</span> Inicialización del Entorno</h2>
+            <p>Despliegue del intérprete Python 3.11 mediante Homebrew:</p>
+            <div class="terminal-block">
+                <span class="command-label">Terminal Shell</span>
+                <code>brew install python@3.11</code>
+            </div>
+            <p>Aislamiento mediante entorno virtual (venv):</p>
+            <div class="terminal-block">
+                <code>python3.11 -m venv .venv && source .venv/bin/activate</code>
+            </div>
+        </section>
+
+        <section id="paso2">
+            <h2 class="section-title"><span>02</span> Inyección de Librerías</h2>
+            <p>Instalación del núcleo MLX-LM y herramientas de gestión de datasets:</p>
+            <div class="terminal-block">
+                <code>pip install "mlx-lm[train]" "huggingface_hub[cli]" datasets</code>
+            </div>
+        </section>
+
+        <section id="paso3">
+            <h2 class="section-title"><span>03</span> Localización del Modelo</h2>
+            <p>Sincronización de los pesos en 4-bit optimizados para silicio de Apple:</p>
+            <div class="terminal-block">
+                <code>hf download mlx-community/gemma-3-270m-it-4bit --local-dir models/gemma-3-270m-it-4bit</code>
+            </div>
+        </section>
+
+        <section id="paso4">
+            <h2 class="section-title"><span>04</span> Estructura del Dataset</h2>
+            <p>Los datos de entrenamiento deben seguir el esquema JSONL de mensajes. Cada entrada es un vector de conocimiento único:</p>
+            <div class="terminal-block">
+                <span class="command-label">data/train.jsonl</span>
+                <code>{"messages":[{"role":"system","content":"Asistente ASIR..."},{"role":"user","content":"¿Quién es Rafa Vadal?"},{"role":"assistant","content":"Es un pescador famoso..."}]}</code>
+            </div>
+        </section>
+
+        <section id="paso5">
+            <h2 class="section-title"><span>05</span> Ejecución del Fine-Tuning</h2>
+            <p>Lanzamiento del proceso de entrenamiento con 1000 iteraciones:</p>
+            <div class="terminal-block">
+                <code>python -m mlx_lm.lora --model ./models/... --data ./data --train --iters 1000 --adapter-path ./adapters</code>
+            </div>
+        </section>
+
+        <section id="paso6">
+            <h2 class="section-title"><span>06</span> Verificación de Resultados</h2>
+            <p>Testeo de la respuesta del modelo adaptado:</p>
+            <div class="terminal-block">
+                <code>mlx_lm.generate --model ./models/... --adapter-path ./adapters --prompt "¿Quién es Rafa Vadal?"</code>
+            </div>
+        </section>
+
+        <section id="errores">
+            <h2 class="section-title"><span>07</span> Debugging Logs</h2>
+            
+            <div class="log-entry error">
+                <h4>Status 401: Repository Not Found</h4>
+                <p>El sistema intenta fetch remoto en lugar de local.</p>
+                <div class="fix">Solución: Declarar rutas absolutas con $(pwd) en el comando.</div>
+            </div>
+
+            <div class="log-entry error">
+                <h4>JSONDecodeError: Line 2</h4>
+                <p>Presencia de caracteres nulos o líneas vacías en el dataset.</p>
+                <div class="fix">Solución: Ejecutar script de limpieza de strings en el archivo .jsonl.</div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Manual Gemma 3-270M Fine-Tuning // Izan López</p>
+            <p>Desplegado en 2026 bajo tecnología MLX Apple Silicon</p>
+        </footer>
+    </main>
+
+</body>
+</html>
